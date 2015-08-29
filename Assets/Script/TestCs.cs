@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+#pragma warning disable 219,414
+
+
 public class TestCs : MonoBehaviour {
 
 	// Use this for initialization
@@ -106,3 +109,5 @@ public class tte
 		return (int)(num * 2000);
 	}
 }
+
+#pragma warning restore 219,414

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelManager : MonoBehaviour {
+public class LevelController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
