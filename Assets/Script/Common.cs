@@ -4,8 +4,8 @@ using System.Collections;
 
 public static class Constants
 {
-	public const int MAX_ROWS = 17;
-	public const int MAX_COLS = 17;
+	public const int MAX_ROWS = 7;
+	public const int MAX_COLS = 9;
 	public const float CELL_SIDE = 1.4f;
 	public const float CELLS_LEFT = -5.65f;
 	public const float CELLS_BOTTOM = -4.7f;
@@ -35,6 +35,12 @@ public enum CellType
 	None,
 	Brick,
 	Bomb
+}
+
+public static class Zorders
+{
+	public const float CellZorder = 0f;
+	public const float UnitZorder = -1f;
 }
 
 public enum BombType
