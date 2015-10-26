@@ -51,8 +51,20 @@ public class LevelController : MonoBehaviour {
 				}
 
 				GameObject unit = (GameObject)Instantiate(_unitT,new Vector3(col,row,Zorders.UnitZorder),Quaternion.identity);
+				var curUnitSc = unit.GetComponent<Unit>();
+				curUnitSc.Init(GetUnitData(row,col));
 			}
 		}
+	}
+
+	UnitData GetUnitData(int row, int col)
+	{
+		var curColor = (UnitColor)Random.Range (1, System.Enum.GetValues (typeof(UnitColor)).Length-1);
+		var curType = UnitType.Brick;// (UnitType)Random.Range (1, System.Enum.GetValues (typeof(UnitType)).Length);
+		var curBombType = BombType.None;
+
+		UnitData curData = new UnitData (curColor, curType, curBombType);
+		return curData;
 	}
 	
 	void Init()

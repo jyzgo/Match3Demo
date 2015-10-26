@@ -19,7 +19,7 @@ public static class Constants
 	public const bool DEBUG_MODE = true;
 }
 
-public enum CellColor {
+public enum UnitColor {
 	None = 0,
 	Red  = 1,
 	Blue = 2,
@@ -30,7 +30,7 @@ public enum CellColor {
 	All
 };
 
-public enum CellType
+public enum UnitType
 {
 	None,
 	Brick,
