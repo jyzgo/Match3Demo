@@ -1,7 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using MTUnity.Actions;
+
 public class LevelController : MonoBehaviour {
+
+	public enum SwapState
+	{
+		Default,
+		Swiping,
+		Updating
+	}
 
 	void Awake()
 	{
@@ -34,6 +43,66 @@ public class LevelController : MonoBehaviour {
 		set;
 	}
 
+	SwapState _state = SwapState.Default;
+	Cell _activeCell  = null;
+	Cell _passiveCell = null;
+	void Update()
+	{
+		switch (_state) {
+		case (SwapState.Default):
+		{
+			if (Input.GetMouseButton (0)) {
+				var hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
+				if (hit.collider != null) {
+					_activeCell = hit.collider.GetComponent<Cell> ();
+					_state = SwapState.Swiping;
+				}
+			}
+			break;
+		}
+		case(SwapState.Swiping):
+		{
+			if (Input.GetMouseButton (0)) {
+				var hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
+				if (hit.collider != null && _activeCell.gameObject != hit.collider.gameObject) {
+					_passiveCell = hit.collider.GetComponent<Cell> ();
+					if (!_activeCell.AreVerticalOrHorizontalNeighbors(_passiveCell))
+					{
+						_state = SwapState.Default;
+					}
+					else
+					{
+						_state = SwapState.Updating;
+
+						Swaping();
+					}
+				}
+			}
+			break;
+
+
+		}
+		}
+
+	}
+
+
+	void Swaping()
+	{
+		var activeUnit = _activeCell.Unit;
+		var passiveUnit = _passiveCell.Unit;
+
+		activeUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, passiveUnit));
+		passiveUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, activeUnit));
+		StartCoroutine (Restore ());
+	}
+
+	IEnumerator Restore()
+	{
+		yield return new WaitForSeconds (Constants.SWAP_TIME);
+		_state = SwapState.Default;
+	}
+
 	void UpdateActiveArea ()
 	{
 	}
@@ -44,6 +113,8 @@ public class LevelController : MonoBehaviour {
 			for(int col = 0 ; col < LevelMaxCol ; col ++)
 			{
 				GameObject cell = (GameObject)Instantiate(_cellT,new Vector3(col,row,Zorders.CellZorder),Quaternion.identity);
+				var curCellSc = cell.gameObject.GetComponent<Cell>();
+				curCellSc.Init(row,col);
 
 				cell.transform.SetParent(_cellHolder.transform);
 				if((row + col +1) % 2 == 0){
@@ -53,6 +124,8 @@ public class LevelController : MonoBehaviour {
 				GameObject unit = (GameObject)Instantiate(_unitT,new Vector3(col,row,Zorders.UnitZorder),Quaternion.identity);
 				var curUnitSc = unit.GetComponent<Unit>();
 				curUnitSc.Init(GetUnitData(row,col));
+				curUnitSc.Cell = curCellSc;
+				curCellSc.Unit = curUnitSc;
 			}
 		}
 	}

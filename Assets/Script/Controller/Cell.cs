@@ -4,22 +4,22 @@ using System.Collections;
 public class Cell :MonoBehaviour
 {
 	public int Row { get; private set; }
-	public int Column { get; private set; }
+	public int Col { get; private set; }
 	
-	public Unit Unit { get; private set; }
+	public Unit Unit { get; set; }
 	
 	public bool IsEmpty { get { return Unit == null; } }
 	
-	public Cell(int row, int col)
+	public void Init(int row, int col)
 	{
 		Row = row;
-		Column = col;
+		Col = col;
 	}
 	
 	public void SetItem(Unit item)
 	{
 		Unit = item;
-		Unit.SetCell(this);
+		Unit.Cell = this;
 	}
 	
 	public bool IsMatched(Cell cell)

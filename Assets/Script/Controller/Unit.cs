@@ -39,11 +39,14 @@ public class Unit : MonoBehaviour
 		get{return _unitColor;}
 	}
 	
-	public Cell Cell { get; private set; }
+	public Cell Cell { get; set; }
 	
-	public void SetCell (Cell cell)
-	{
-		Cell = cell;
+	public int Row{
+		get{return Cell.Row;}
+	}
+
+	public int Col{
+		get{return Cell.Col;}
 	}
 	
 	public bool IsEqual (Unit unit)
