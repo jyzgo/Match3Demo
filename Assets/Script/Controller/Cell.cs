@@ -5,7 +5,13 @@ public class Cell :MonoBehaviour
 {
 	public int Row { get; private set; }
 	public int Col { get; private set; }
-	
+
+	public void SwapUnit(Cell curCell)
+	{
+		Unit temp = Unit;
+		Unit = curCell.Unit;
+		curCell.Unit = temp;
+	}
 	public Unit Unit { get; set; }
 	
 	public bool IsEmpty { get { return Unit == null; } }

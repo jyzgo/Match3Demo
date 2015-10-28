@@ -69,6 +69,7 @@ public class LevelController : MonoBehaviour {
 					if (!_activeCell.AreVerticalOrHorizontalNeighbors(_passiveCell))
 					{
 						_state = SwapState.Default;
+						Restore();
 					}
 					else
 					{
@@ -101,6 +102,9 @@ public class LevelController : MonoBehaviour {
 	{
 		yield return new WaitForSeconds (Constants.SWAP_TIME);
 		_state = SwapState.Default;
+		_activeCell.SwapUnit (_passiveCell);
+		_activeCell = null;
+		_passiveCell = null;
 	}
 
 	void UpdateActiveArea ()
