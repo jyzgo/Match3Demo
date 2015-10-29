@@ -15,6 +15,33 @@ public class Cell :MonoBehaviour
 	public Unit Unit { get; set; }
 	
 	public bool IsEmpty { get { return Unit == null; } }
+
+	public bool IsBombable {
+		get
+		{
+			if(Unit == null)
+				return false;
+			return true;
+		}
+
+	}
+
+	public bool MatchEliminateColor (UnitColor _elimColor)
+	{
+		if (!IsBombable)
+			return false;
+		if (Unit.unitColor == _elimColor)
+			return true;
+		return false;
+	}
+
+	public bool IsEliminateable {
+		get
+		{
+			return IsBombable;
+		}
+
+	}
 	
 	public void Init(int row, int col)
 	{

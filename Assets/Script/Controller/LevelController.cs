@@ -2,9 +2,12 @@
 using System.Collections;
 
 using MTUnity.Actions;
+using System.Collections.Generic;
+using System;
 
 public class LevelController : MonoBehaviour {
 
+	public static LevelController Current = null;
 	public enum SwapState
 	{
 		Default,
@@ -14,6 +17,7 @@ public class LevelController : MonoBehaviour {
 
 	void Awake()
 	{
+		Current = this;
 		_cellT = (GameObject)Resources.Load("Prefabs/Cell", typeof(GameObject));
 		_unitT = (GameObject)Resources.Load ("Prefabs/Unit", typeof(GameObject));
 		_cellHolder = new GameObject("CellHolder");
@@ -26,21 +30,44 @@ public class LevelController : MonoBehaviour {
 	GameObject _cellT;
 	GameObject _unitT;
 
-	int LevelMaxRow {
+	public int MaxRow {
 		get;
 		set;
 	}
 
-	int LevelMaxCol {
+	public int MaxCol {
 		get;
 		set;
 	}
+	public int ActiveMinRow{get;set;}
+	public int ActiveMinCol{get;set;}
+	public int ActiveMaxRow{get;set;}
+	public int ActiveMaxCol{get;set;}
 
+	public bool IsInBorder(int curRow,int curCol)
+	{
+		if(curRow >= ActiveMinRow && curRow < ActiveMaxRow 
+			&& curCol >= ActiveMinCol && curCol <ActiveMaxCol)
+		{
+			return true;
+		}
+		return false;
+	}
 	GameObject _cellHolder;
+
+	public bool IsSameColor (Cell _curCell, Cell _leftUpCell)
+	{
+		throw new NotImplementedException ();
+	}
 
 	int LevelState {
 		get;
 		set;
+	}
+
+	public void CheckSameColorAndAdd (Cell _curCell, int i, int i2, List<Cell> _leftList)
+	{
+		throw new NotImplementedException ();
 	}
 
 	SwapState _state = SwapState.Default;
@@ -120,14 +147,31 @@ public class LevelController : MonoBehaviour {
 	{
 	}
 
+	public Cell this [int row, int col] {
+		get {
+			var curColList = _rowList[row];
+			if(curColList != null)
+				return curColList[col];
+			return null;
+		}
+	}
+
+	List<List<Cell>> _rowList;
+
+
 	void InitCells()
 	{
-		for (int row = 0; row <LevelMaxRow; row ++) {
-			for(int col = 0 ; col < LevelMaxCol ; col ++)
+		_rowList = new List<List<Cell>> ();
+		for (int row = 0; row <MaxRow; row ++) {
+			var colList = new List<Cell>();
+			_rowList.Add(colList);
+			for(int col = 0 ; col < MaxCol ; col ++)
 			{
+
 				GameObject cell = (GameObject)Instantiate(_cellT,new Vector3(col,row,Zorders.CellZorder),Quaternion.identity);
 				var curCellSc = cell.gameObject.GetComponent<Cell>();
 				curCellSc.Init(row,col);
+				colList.Add(curCellSc);
 
 				cell.transform.SetParent(_cellHolder.transform);
 				if((row + col +1) % 2 == 0){
@@ -145,7 +189,7 @@ public class LevelController : MonoBehaviour {
 
 	UnitData GetUnitData(int row, int col)
 	{
-		var curColor = (UnitColor)Random.Range (1, System.Enum.GetValues (typeof(UnitColor)).Length-1);
+		var curColor = (UnitColor)UnityEngine.Random.Range (1, System.Enum.GetValues (typeof(UnitColor)).Length-1);
 		var curType = UnitType.Brick;// (UnitType)Random.Range (1, System.Enum.GetValues (typeof(UnitType)).Length);
 		var curBombType = BombType.None;
 
@@ -155,8 +199,11 @@ public class LevelController : MonoBehaviour {
 	
 	void Init()
 	{
-		LevelMaxRow = Constants.MAX_ROWS;
-		LevelMaxCol = Constants.MAX_COLS;
+		MaxRow = Constants.MAX_ROWS;
+		MaxCol = Constants.MAX_COLS;
+
+		ActiveMinRow = MaxRow;
+		ActiveMaxCol = MaxCol;
 
 
 		

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class LevelConfig  {
 	
@@ -9,6 +10,10 @@ public class LevelConfig  {
 	public int ActiveRow{ set; get;}
 	public int ActiveCol{ set; get;}
 
+	public LevelConfig (JSONObject json)
+	{
+		throw new NotImplementedException ();
+	}
 
 	public void InitLevelConfig(int lvId)
 	{
@@ -17,6 +22,9 @@ public class LevelConfig  {
 		UpdateBySubId (0);
 
 	}
+
+	public int id
+	{ set; get;}
 
 	public bool UpdateBySubId(int subId)
 	{
