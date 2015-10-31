@@ -123,6 +123,12 @@ public class GameConfig : Singleton<GameConfig>
 	public List<string> BombConfList
 	{
 		get{
+			if(_bombConfList.Count == 0)
+			{
+
+				string[] BombConfList = {"D","C","F","S","H","V","NV","NH"};
+				_bombConfList.AddRange(BombConfList);
+			}
 			return _bombConfList;
 		}
 	}

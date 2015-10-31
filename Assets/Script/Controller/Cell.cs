@@ -55,9 +55,13 @@ public class Cell :MonoBehaviour
 		Unit.Cell = this;
 	}
 	
-	public bool IsMatched(Cell cell)
+	public bool IsMatchColor(Cell oth)
 	{
-		return !IsEmpty && !cell.IsEmpty && Unit.IsEqual(cell.Unit);
+		if (IsEmpty || oth.IsEmpty)
+			return false;
+		if (Unit.unitColor == oth.Unit.unitColor)
+			return true;
+		return false;
 	}
 	
 	public void Clear()

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 // 	// Cross
 // }
 using System;
+using MTUnity;
 
 public enum ReactionType
 {
@@ -24,20 +25,10 @@ public enum ReactionType
 
 
 
-public class MatchHandler   {
+public class MatchHandler :Singleton<MatchHandler>   {
+
 	public Cell _curCell = null;
-	public MatchHandler(Cell curCell)
-	{
-		_curCell = curCell;
-		CalculateMatch ();
-		CheckReactionType ();
-
-	}
-
-	MatchReaction _curMatchReaction = null;
-	public MatchReaction CurMatchReaction{
-		get{ return _curMatchReaction;}
-	}
+	
 		 
 	public List<Cell> _leftList  = new List<Cell>();
 	public List<Cell> _rightList = new List<Cell>();
@@ -53,6 +44,35 @@ public class MatchHandler   {
 	public Cell _upRightCell = null;
 	public Cell _rightDownCell = null;
 	public Cell _downLeftCell = null;
+
+	public MatchReaction GetMatchReaction(Cell curCell)
+	{
+		Reset();
+		_curCell = curCell;
+		CalculateMatch ();
+		return CheckReactionType ();
+	}
+	
+	void Reset()
+	{
+		_curCell = null;
+		_leftList .Clear(); 
+		_rightList.Clear(); 
+		_upList   .Clear(); 
+		_downList .Clear(); 
+		
+		_IsMatchLeftUp = false;
+		_IsMatchUpRight = false;
+		_IsMatchRightDown = false;
+		_IsMatchDownLeft = false;
+		
+		_leftUpCell = null;
+		_upRightCell = null;
+		_rightDownCell = null;
+		_downLeftCell = null;
+		
+		
+	}
 
 	void CalculateMatch()
 	{
@@ -78,22 +98,21 @@ public class MatchHandler   {
 
 	}
 
-	void CheckReactionType()
+	MatchReaction CheckReactionType()
 	{
 		var bombConfList = GameConfig.Instance.BombConfList;
 		for (int i = 0; i < bombConfList.Count; ++i) {
 			var curReaction = CreateReaction (bombConfList [i]);
 			if (curReaction != null && curReaction.ReactionType != ReactionType.None) {
-				_curMatchReaction = curReaction;
-				return;
+				return curReaction;
 			}
-		
 		}
+		return null;
 	}
 
 	public MatchReaction CreateReaction(string curStr)
 	{
-//		"D","C","F","S","H","V"
+
 
 		switch (curStr) 
 		{

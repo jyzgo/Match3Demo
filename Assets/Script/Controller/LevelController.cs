@@ -55,9 +55,11 @@ public class LevelController : MonoBehaviour {
 	}
 	GameObject _cellHolder;
 
-	public bool IsSameColor (Cell _curCell, Cell _leftUpCell)
+	public bool IsSameColor (Cell lCell, Cell rCell)
 	{
-		throw new NotImplementedException ();
+		if (lCell == null || rCell == null)
+			return false;
+		return lCell.IsMatchColor (rCell);
 	}
 
 	int LevelState {
@@ -65,9 +67,33 @@ public class LevelController : MonoBehaviour {
 		set;
 	}
 
-	public void CheckSameColorAndAdd (Cell _curCell, int i, int i2, List<Cell> _leftList)
+	public void CheckSameColorAndAdd (Cell g, int offRow, int offCol, List<Cell> curList)
 	{
-		throw new NotImplementedException ();
+		int curRow = g.Row;
+		int curCol = g.Col;
+		
+		
+		while (true) {
+			
+			int nextRow = curRow + offRow;
+			int nextCol = curCol + offCol;
+			
+			if(!IsInBorder(nextRow,nextCol))
+			{
+				return;
+			}
+			var nextCell = this[nextRow,nextCol];
+			curRow = nextRow;
+			curCol = nextCol;
+			if(g.IsMatchColor(nextCell) && nextCell.Unit.bombType != BombType.Coloring)
+			{
+				curList.Add(nextCell);
+				
+			}else
+			{
+				return;
+			}
+		}
 	}
 
 	SwapState _state = SwapState.Default;
@@ -121,6 +147,13 @@ public class LevelController : MonoBehaviour {
 		var activeUnit = _activeCell.Unit;
 		var passiveUnit = _passiveCell.Unit;
 
+		var actReact = MatchHandler.Instance.GetMatchReaction (_activeCell);
+		var pasReact = MatchHandler.Instance.GetMatchReaction (_passiveCell);
+
+		if (actReact != null || pasReact != null) {
+			isAbleSwap = true;
+		}
+
 		if (isAbleSwap) {
 			activeUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, passiveUnit));
 			passiveUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, activeUnit));
@@ -149,8 +182,10 @@ public class LevelController : MonoBehaviour {
 
 	public Cell this [int row, int col] {
 		get {
+			if(row >= _rowList.Count)
+				return null;
 			var curColList = _rowList[row];
-			if(curColList != null)
+			if(curColList != null && col < curColList.Count)
 				return curColList[col];
 			return null;
 		}
