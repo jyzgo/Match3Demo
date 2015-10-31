@@ -128,7 +128,7 @@ public class LevelController : MonoBehaviour {
 					{
 						_state = SwapState.Updating;
 
-						Swaping();
+						StartCoroutine(Swaping());
 					}
 				}
 			}
@@ -139,39 +139,42 @@ public class LevelController : MonoBehaviour {
 		}
 
 	}
+	
 
-
-	void Swaping()
+	IEnumerator Swaping()
 	{
-		bool isAbleSwap = false;
-		var activeUnit = _activeCell.Unit;
-		var passiveUnit = _passiveCell.Unit;
+		var activePosition = new Vector3 (_activeCell.transform.position.x, _activeCell.transform.position.y, _activeCell.Unit.transform.position.z);
+		var passivePostion = new Vector3 (_passiveCell.transform.position.x, _passiveCell.transform.position.y, _passiveCell.Unit.transform.position.z);
 
+		// swap model and play action
+		_activeCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,passivePostion));
+		_passiveCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,activePosition));
+		_activeCell.SwapUnit (_passiveCell);
+
+		yield return new WaitForSeconds (Constants.SWAP_TIME);
+
+		//check is match or not
 		var actReact = MatchHandler.Instance.GetMatchReaction (_activeCell);
 		var pasReact = MatchHandler.Instance.GetMatchReaction (_passiveCell);
 
 		if (actReact != null || pasReact != null) {
-			isAbleSwap = true;
-		}
+			//yes, is able to swap
 
-		if (isAbleSwap) {
-			activeUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, passiveUnit));
-			passiveUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, activeUnit));
-			StartCoroutine (Restore (Constants.SWAP_TIME,true));
 		} else {
-			activeUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, passiveUnit),MTMoveTo.Create (Constants.SWAP_TIME, activeUnit));
-			passiveUnit.RunActions (MTMoveTo.Create (Constants.SWAP_TIME, activeUnit),MTMoveTo.Create (Constants.SWAP_TIME, passiveUnit));
-			StartCoroutine (Restore (Constants.SWAP_TIME * 2));
+			//no, unable to swap,swap back them
+			_activeCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,passivePostion));
+			_passiveCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,activePosition));
+			_activeCell.SwapUnit (_passiveCell);
+			yield return new WaitForSeconds(Constants.SWAP_TIME);
 		}
+		Restore ();
+
 	}
 
-	IEnumerator Restore(float time = 0f,bool isSwapAble = false)
+	void Restore()
 	{
-		yield return new WaitForSeconds (time);
 		_state = SwapState.Default;
-		if (isSwapAble) {
-			_activeCell.SwapUnit (_passiveCell);
-		}
+		
 		_activeCell = null;
 		_passiveCell = null;
 	}
@@ -182,7 +185,9 @@ public class LevelController : MonoBehaviour {
 
 	public Cell this [int row, int col] {
 		get {
-			if(row >= _rowList.Count)
+			if(row < 0 || col < 0)
+				return null;
+			if(row >= _rowList.Count )
 				return null;
 			var curColList = _rowList[row];
 			if(curColList != null && col < curColList.Count)
