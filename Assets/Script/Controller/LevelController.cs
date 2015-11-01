@@ -242,7 +242,9 @@ public class LevelController : MonoBehaviour {
 		MaxRow = Constants.MAX_ROWS;
 		MaxCol = Constants.MAX_COLS;
 
-		ActiveMinRow = MaxRow;
+		ActiveMinRow = 0;
+		ActiveMaxRow = MaxRow;
+		ActiveMinCol = 0;
 		ActiveMaxCol = MaxCol;
 
 
