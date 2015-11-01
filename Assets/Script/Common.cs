@@ -12,7 +12,7 @@ public static class Constants
 	public const float SWAP_TIME = 0.3f;
 	public const float FORM_TIME = 0.33f;
 
-	public const float CELL_ELIM_TIME = 0.13f;
+	public const float UNIT_ELIM_TIME = 0.13f;
 
 	public const int CORLOR_NUM = 7;
 

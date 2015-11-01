@@ -26,6 +26,17 @@ public class Cell :MonoBehaviour
 
 	}
 
+	public void Elim ()
+	{
+		if (Unit != null)
+			Unit.Elim ();
+	}
+
+	public void ElimDone ()
+	{
+		Debug.Log("Elim done");
+	}
+
 	public bool MatchEliminateColor (UnitColor _elimColor)
 	{
 		if (!IsBombable)

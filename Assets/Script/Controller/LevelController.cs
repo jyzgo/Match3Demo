@@ -159,6 +159,8 @@ public class LevelController : MonoBehaviour {
 
 		if (actReact != null || pasReact != null) {
 			//yes, is able to swap
+			TryElim(actReact);
+			TryElim(pasReact);
 
 		} else {
 			//no, unable to swap,swap back them
@@ -171,10 +173,23 @@ public class LevelController : MonoBehaviour {
 
 	}
 
+	void TryElim(MatchReaction curReact)
+	{
+		if (curReact == null)
+			return;
+
+		var elimList = curReact._finalList;
+		curReact._curCell.Elim ();
+		for (int i = 0; i <elimList.Count; ++i) {
+			var curCell = elimList[i];
+			curCell.Elim();
+		}
+
+	}
+
 	void Restore()
 	{
 		_state = SwapState.Default;
-		
 		_activeCell = null;
 		_passiveCell = null;
 	}

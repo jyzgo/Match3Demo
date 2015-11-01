@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using MTUnity.Actions;
 
 public struct UnitData
 {
@@ -17,9 +18,20 @@ public struct UnitData
 	}
 }
 
+public enum UnitMoveState
+{
+	Default,
+	Droping
+}
+
+public enum UnitElimState
+{
+	Default,
+	Eliming
+}
+
 public class Unit : MonoBehaviour
 {
-
 
 	UnitType _unitType;
 	public UnitType unitType
@@ -37,6 +49,29 @@ public class Unit : MonoBehaviour
 	public UnitColor unitColor
 	{
 		get{return _unitColor;}
+	}
+
+	public UnitMoveState _moveState{ set; get; }
+	public UnitElimState _elimState{ set; get;}
+
+	public void Elim ()
+	{
+		if (_elimState == UnitElimState.Eliming)
+			return;
+		_elimState = UnitElimState.Eliming;
+		StartCoroutine (Eliming ());
+
+	}
+
+	IEnumerator Eliming()
+	{
+		var duration = Constants.UNIT_ELIM_TIME;
+		var shink = new MTScaleTo (duration, 0.1f);
+		var fade = new MTFadeOut (duration);
+		var spawn = new MTSpawn (shink, fade);
+		gameObject.RunActions (spawn, new MTDestroy ());
+		yield return new WaitForSeconds (duration);
+		Cell.ElimDone ();
 	}
 	
 	public Cell Cell { get; set; }
@@ -59,6 +94,8 @@ public class Unit : MonoBehaviour
 		_unitType = curData.type;
 		_bombType = curData.bombType;
 		_unitColor = curData.color;
+		_moveState = UnitMoveState.Default;
+		_elimState = UnitElimState.Default; 
 		UpdateCell ();
 	}
 
