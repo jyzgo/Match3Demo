@@ -100,7 +100,7 @@ public class MatchHandler :Singleton<MatchHandler>   {
 
 	MatchReaction CheckReactionType()
 	{
-		Debug.Log ("left list " + _leftList.Count);
+
 		var bombConfList = GameConfig.Instance.BombConfList;
 		for (int i = 0; i < bombConfList.Count; ++i) {
 			var curReaction = CreateReaction (bombConfList [i]);

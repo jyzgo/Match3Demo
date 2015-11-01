@@ -46,6 +46,7 @@ public class LevelController : MonoBehaviour {
 
 	public bool IsInBorder(int curRow,int curCol)
 	{
+//		Debug.Log ("min row " + ActiveMinRow + " max row " + ActiveMaxRow + " min  col " + ActiveMinCol + " max col " + ActiveMaxCol);
 		if(curRow >= ActiveMinRow && curRow < ActiveMaxRow 
 			&& curCol >= ActiveMinCol && curCol <ActiveMaxCol)
 		{
@@ -80,6 +81,7 @@ public class LevelController : MonoBehaviour {
 			
 			if(!IsInBorder(nextRow,nextCol))
 			{
+//				Debug.Log("not in " + "row " + nextRow + " col " + nextCol);
 				return;
 			}
 			var nextCell = this[nextRow,nextCol];
@@ -96,6 +98,16 @@ public class LevelController : MonoBehaviour {
 		}
 	}
 
+	void TestCheck(Cell curCell)
+	{
+		var react = MatchHandler.Instance.GetMatchReaction (curCell);
+		if (react == null) {
+			Debug.Log ("react is null");
+		} else {
+			Debug.Log("react type " + react.ReactionType);
+		}
+	}
+
 	SwapState _state = SwapState.Default;
 	Cell _activeCell  = null;
 	Cell _passiveCell = null;
@@ -109,6 +121,8 @@ public class LevelController : MonoBehaviour {
 				if (hit.collider != null) {
 					_activeCell = hit.collider.GetComponent<Cell> ();
 					_state = SwapState.Swiping;
+
+					return;
 				}
 			}
 			break;
@@ -242,7 +256,10 @@ public class LevelController : MonoBehaviour {
 		MaxRow = Constants.MAX_ROWS;
 		MaxCol = Constants.MAX_COLS;
 
-		ActiveMinRow = MaxRow;
+		ActiveMinRow = 0;
+		ActiveMaxRow = MaxRow;
+
+		ActiveMinCol = 0;
 		ActiveMaxCol = MaxCol;
 
 
