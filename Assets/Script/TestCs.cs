@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using LitJson;
 
 #pragma warning disable 219,414
 
@@ -13,14 +14,44 @@ public class TestCs : MonoBehaviour {
 //		testEnum ();
 //		caller();
 		inCaller();
+		SaveToFile ();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void SaveToFile()
+	{
+		string str = @"
+            {
+                ""Name""     : ""yusong"",
+                ""Age""      : 26,
+				""Face""     : 12.5,
+                ""Birthday"" : ""1986-11-21"",
+ 				""Thumbnail"":[
+				{
+           			""Url"":    ""http://xuanyusong.com"",
+           			""Height"": 256,
+           			""Width"":  ""200""
+				},
+				{
+           			""Url"":    ""http://baidu.com"",
+           			""Height"": 1024,
+           			""Width"":  ""500""
+				}
+ 
+				]
+            }";
 
-
-	
+		JsonData jd = JsonMapper.ToObject (str);
+		Debug.Log (" name is " + (string)jd ["Name"]);
+		Debug.Log("Age is " + (int)jd["Age"]);
+		Debug.Log("Face is " + (double)jd["Face"]);
+		JsonData jdItems = jd["Thumbnail"];
+		for (int i = 0; i < jdItems.Count; i ++) {
+			var curData = jdItems[i];
+			var curURL = (string)curData["Url"];
+			Debug.Log ("url " + curURL);
+		}
 	}
+
 
 	void OnGUI()
 	{

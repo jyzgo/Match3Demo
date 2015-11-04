@@ -1,0 +1,56 @@
+{
+	"MaxRow":9,
+	"MaxCol":9,
+	"Cells":[
+		{
+			"row":0,
+			"col":0,
+			"cellState":1,
+			"floor":{
+				"floorType":1,
+				"floorHp":2
+			},
+			"unit":{
+				"unitType":1,
+				"unitColor":1,
+				"unitHp":1,
+				"bombType":2,
+
+			},
+			"cover":{
+				"coverType":1,
+				"coverHp":2
+			},
+			"treasureId":0
+		},
+		{
+			"row":0,
+			"col":1,
+			"cellState":1,
+			"floor":{
+				"floorType":1,
+				"floorHp":2
+			},
+			"unit":{
+				"unitType":1,
+				"unitColor":1,
+				"unitHp":1,
+				"bombType":2,
+
+			},
+			"cover":{
+				"coverType":1,
+				"coverHp":2
+			},
+			"treasureId":0
+		},
+	],
+	"Treasures":[
+		{
+			"treasureType":1,
+			"width":2,
+			"height":1
+		}
+
+	]
+}
