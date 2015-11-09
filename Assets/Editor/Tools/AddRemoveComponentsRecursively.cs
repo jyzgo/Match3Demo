@@ -65,8 +65,8 @@ public class AddRemoveComponentsRecursively : ScriptableWizard
 		{
 			if (t.gameObject.GetComponent(componentType) == null)
 			{
-//				if (UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(t.gameObject, "Assets/Editor/Tools/AddRemoveComponentsRecursively.cs (68,9)", componentType) == null)
-				if(t.gameObject.AddComponent<typeof(componentType)>)
+				if (UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(t.gameObject, "Assets/Editor/Tools/AddRemoveComponentsRecursively.cs (68,9)", componentType) == null)
+//				if(t.gameObject.AddComponent<typeof(componentType)>())
 				{
 					Debug.LogWarning("Component of type " + componentType + " does not exist");
 					return;
