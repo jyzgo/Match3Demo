@@ -5,9 +5,9 @@ using MTUnity.Actions;
 using System.Collections.Generic;
 using System;
 
-public class LevelController : MonoBehaviour {
+public class LevelCtrl : MonoBehaviour {
 
-	public static LevelController Current = null;
+	public static LevelCtrl Current = null;
 	public enum SwapState
 	{
 		Default,
@@ -55,7 +55,7 @@ public class LevelController : MonoBehaviour {
 	}
 	GameObject _cellHolder;
 
-	public bool IsSameColor (Cell lCell, Cell rCell)
+	public bool IsSameColor (CellCtrl lCell, CellCtrl rCell)
 	{
 		if (lCell == null || rCell == null)
 			return false;
@@ -67,7 +67,7 @@ public class LevelController : MonoBehaviour {
 		set;
 	}
 
-	public void CheckSameColorAndAdd (Cell g, int offRow, int offCol, List<Cell> curList)
+	public void CheckSameColorAndAdd (CellCtrl g, int offRow, int offCol, List<CellCtrl> curList)
 	{
 		int curRow = g.Row;
 		int curCol = g.Col;
@@ -97,8 +97,8 @@ public class LevelController : MonoBehaviour {
 	}
 
 	SwapState _state = SwapState.Default;
-	Cell _activeCell  = null;
-	Cell _passiveCell = null;
+	CellCtrl _activeCell  = null;
+	CellCtrl _passiveCell = null;
 	void Update()
 	{
 		switch (_state) {
@@ -107,7 +107,7 @@ public class LevelController : MonoBehaviour {
 			if (Input.GetMouseButton (0)) {
 				var hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
 				if (hit.collider != null) {
-					_activeCell = hit.collider.GetComponent<Cell> ();
+					_activeCell = hit.collider.GetComponent<CellCtrl> ();
 					_state = SwapState.Swiping;
 				}
 			}
@@ -118,7 +118,7 @@ public class LevelController : MonoBehaviour {
 			if (Input.GetMouseButton (0)) {
 				var hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
 				if (hit.collider != null && _activeCell.gameObject != hit.collider.gameObject) {
-					_passiveCell = hit.collider.GetComponent<Cell> ();
+					_passiveCell = hit.collider.GetComponent<CellCtrl> ();
 					if (!_activeCell.AreVerticalOrHorizontalNeighbors(_passiveCell))
 					{
 						_state = SwapState.Default;
@@ -198,7 +198,7 @@ public class LevelController : MonoBehaviour {
 	{
 	}
 
-	public Cell this [int row, int col] {
+	public CellCtrl this [int row, int col] {
 		get {
 			if(row < 0 || col < 0)
 				return null;
@@ -211,22 +211,24 @@ public class LevelController : MonoBehaviour {
 		}
 	}
 
-	List<List<Cell>> _rowList;
+	List<List<CellCtrl>> _rowList;
 
 
 	void InitCells()
 	{
-		_rowList = new List<List<Cell>> ();
+		_rowList = new List<List<CellCtrl>> ();
 		for (int row = 0; row <MaxRow; row ++) {
-			var colList = new List<Cell>();
+			var colList = new List<CellCtrl>();
 			_rowList.Add(colList);
 			for(int col = 0 ; col < MaxCol ; col ++)
 			{
 
 				GameObject cell = (GameObject)Instantiate(_cellT,new Vector3(col,row,Zorders.CellZorder),Quaternion.identity);
-				var curCellSc = cell.gameObject.GetComponent<Cell>();
+				var curCellSc = cell.gameObject.GetComponent<CellCtrl>();
 				curCellSc.Init(row,col);
 				colList.Add(curCellSc);
+				curCellSc.DirRow = 0 ;
+				curCellSc.DirCol = -1;
 
 				cell.transform.SetParent(_cellHolder.transform);
 				if((row + col +1) % 2 == 0){
@@ -234,12 +236,26 @@ public class LevelController : MonoBehaviour {
 				}
 
 				GameObject unit = (GameObject)Instantiate(_unitT,new Vector3(col,row,Zorders.UnitZorder),Quaternion.identity);
-				var curUnitSc = unit.GetComponent<Unit>();
+				var curUnitSc = unit.GetComponent<UnitCtrl>();
 				curUnitSc.Init(GetUnitData(row,col));
 				curUnitSc.Cell = curCellSc;
 				curCellSc.Unit = curUnitSc;
 			}
 		}
+	}
+
+	public bool CheckDrop()
+	{
+		bool isDrop = false;
+		for (int row = 0; row <_rowList.Count; row ++) 
+		{
+			var colList = _rowList[row];
+			for(int col = 0 ; col < colList.Count ; col ++)
+			{
+				
+			}
+		}
+		return isDrop;
 	}
 
 	UnitData GetUnitData(int row, int col)

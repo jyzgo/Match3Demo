@@ -17,8 +17,8 @@ public struct BombInfo{
 	public UnitType _formType;
 	public UnitColor _formColor;
 	public int _subType ;
-	public Cell _triggerModel;
-	public BombInfo(Cell triggerModel, float delay,int row,int col,BombCmd bombCmd = BombCmd.None,UnitType curType = UnitType.None,int curSubType = 0,UnitColor curColor = UnitColor.None)
+	public CellCtrl _triggerModel;
+	public BombInfo(CellCtrl triggerModel, float delay,int row,int col,BombCmd bombCmd = BombCmd.None,UnitType curType = UnitType.None,int curSubType = 0,UnitColor curColor = UnitColor.None)
 	{
 		_triggerModel = triggerModel;
 		_row = row;
@@ -41,7 +41,7 @@ public abstract class BombResult  {
 		get{return _elimInfoList ;}
 	}
 
-	protected Cell _triggerModel;
+	protected CellCtrl _triggerModel;
 
 
 	protected int _curRow;
@@ -53,17 +53,17 @@ public abstract class BombResult  {
 	protected int _maxCol;
 	protected int _minCol;
 
-	public BombResult(Cell curModel)
+	public BombResult(CellCtrl curModel)
 	{
 		_triggerModel = curModel;
 
 		_elimInfoList = new List<BombInfo>();
 
-		_minCol = LevelController.Current.ActiveMinCol;
-		_maxCol = LevelController.Current.ActiveMaxRow;
+		_minCol = LevelCtrl.Current.ActiveMinCol;
+		_maxCol = LevelCtrl.Current.ActiveMaxRow;
 
-		_minRow = LevelController.Current.ActiveMinRow;
-		_maxRow = LevelController.Current.ActiveMaxRow;
+		_minRow = LevelCtrl.Current.ActiveMinRow;
+		_maxRow = LevelCtrl.Current.ActiveMaxRow;
 
 		 _curRow = _triggerModel.Row;
 		 _curCol = _triggerModel.Col;
@@ -93,28 +93,28 @@ public abstract class BombResult  {
 
 	bool IsInBorder(int curRow,int curCol)
 	{
-		return LevelController.Current.IsInBorder (curRow, curCol);
+		return LevelCtrl.Current.IsInBorder (curRow, curCol);
 	}
 
 }
 
 public  abstract class FishResult : BombResult {
 	
-	public FishResult(Cell curModel):base(curModel)
+	public FishResult(CellCtrl curModel):base(curModel)
 	{}
 
 	protected virtual void CaulcElimList()
 	{}
 
-	protected List<Cell> _mvpCellList= new List<Cell>();
+	protected List<CellCtrl> _mvpCellList= new List<CellCtrl>();
 	protected void FindMvpCells()
 	{
-		var curGrid = LevelController.Current;
+		var curGrid = LevelCtrl.Current;
 		for (int curRow = _minRow ; curRow < _maxRow; ++curRow) 
 		{
 			for (int curCol = _minCol; curCol < _maxCol; ++curCol) 
 			{
-				Cell curCell = curGrid[curRow,curCol];
+				CellCtrl curCell = curGrid[curRow,curCol];
 				if (curCell!= null && curCell.IsBombable) 
 				{
 					_mvpCellList.Add(curCell);

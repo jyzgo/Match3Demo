@@ -30,7 +30,7 @@ public enum UnitElimState
 	Eliming
 }
 
-public class Unit : MonoBehaviour
+public class UnitCtrl : MonoBehaviour
 {
 
 	UnitType _unitType;
@@ -74,7 +74,7 @@ public class Unit : MonoBehaviour
 		Cell.ElimDone ();
 	}
 	
-	public Cell Cell { get; set; }
+	public CellCtrl Cell { get; set; }
 	
 	public int Row{
 		get{return Cell.Row;}
@@ -84,7 +84,7 @@ public class Unit : MonoBehaviour
 		get{return Cell.Col;}
 	}
 	
-	public bool IsEqual (Unit unit)
+	public bool IsEqual (UnitCtrl unit)
 	{
 		return unit != null && unit.unitType == unitType;
 	}

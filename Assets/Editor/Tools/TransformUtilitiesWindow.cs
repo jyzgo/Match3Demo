@@ -95,7 +95,10 @@ public class TransformUtilitiesWindow : EditorWindow
 		//Source transform
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Align to: \t");
-		source = EditorGUILayout.ObjectField(source, typeof(Transform)) as Transform;
+		source = EditorGUILayout.ObjectField(source, typeof(Transform),true) as Transform;
+
+
+
 		GUILayout.EndHorizontal();
 		
 		string[] texts = new string[4] { "Min", "Max", "Center", "Pivot" };
@@ -182,7 +185,7 @@ public class TransformUtilitiesWindow : EditorWindow
 					tmp.z = zCheckbox ? sourceAlignData.z - (transformAlignData.z - t.position.z) : t.position.z;
 					
 					//Register the Undo
-					Undo.RegisterUndo(t, "Align " + t.gameObject.name + " to " + source.gameObject.name);
+					Undo.RecordObject(t, "Align " + t.gameObject.name + " to " + source.gameObject.name);
 					t.position = tmp;
 					
 					//Ugly hack!
@@ -225,7 +228,7 @@ public class TransformUtilitiesWindow : EditorWindow
 		//Source transform
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Copy from: \t");
-		source = EditorGUILayout.ObjectField(source, typeof(Transform)) as Transform;
+		source = EditorGUILayout.ObjectField(source, typeof(Transform),true) as Transform;
 		GUILayout.EndHorizontal();
 		
 		EditorGUILayout.Space();
@@ -242,7 +245,7 @@ public class TransformUtilitiesWindow : EditorWindow
 					tmp.y = yCheckbox ? source.position.y : t.position.y;
 					tmp.z = zCheckbox ? source.position.z : t.position.z;
 					
-					Undo.RegisterUndo(t, "Copy position");
+					Undo.RecordObject(t, "Copy position");
 					t.position = tmp;
 				}
 			}
@@ -267,7 +270,7 @@ public class TransformUtilitiesWindow : EditorWindow
 					Quaternion tmp2 = t.rotation;
 					tmp2.eulerAngles = tmp;
 					
-					Undo.RegisterUndo(t, "Copy rotation");
+					Undo.RecordObject(t, "Copy rotation");
 					t.rotation = tmp2;
 				}
 			}
@@ -290,7 +293,7 @@ public class TransformUtilitiesWindow : EditorWindow
 					tmp.y = yCheckbox ? source.localScale.y : t.localScale.y;
 					tmp.z = zCheckbox ? source.localScale.z : t.localScale.z;
 					
-					Undo.RegisterUndo(t, "Copy local scale");
+					Undo.RecordObject(t, "Copy local scale");
 					t.localScale = tmp;
 				}
 			}
@@ -319,7 +322,7 @@ public class TransformUtilitiesWindow : EditorWindow
 				tmp.y = yCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : t.position.y;
 				tmp.z = zCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : t.position.z;
 				
-				Undo.RegisterUndo(t, "Randomize position");
+				Undo.RecordObject(t, "Randomize position");
 				t.position = tmp;
 			}
 		}
@@ -336,7 +339,7 @@ public class TransformUtilitiesWindow : EditorWindow
 				Quaternion tmp2 = t.rotation;
 				tmp2.eulerAngles = tmp;
 				
-				Undo.RegisterUndo(t, "Randomize rotation");
+				Undo.RecordObject(t, "Randomize rotation");
 				t.rotation = tmp2;
 			}
 		}
@@ -351,7 +354,7 @@ public class TransformUtilitiesWindow : EditorWindow
 				tmp.y = yCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : t.localScale.y;
 				tmp.z = zCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : t.localScale.z;
 				
-				Undo.RegisterUndo(t, "Randomize local scale");
+				Undo.RecordObject(t, "Randomize local scale");
 				t.localScale = tmp;
 			}
 		}
@@ -374,7 +377,7 @@ public class TransformUtilitiesWindow : EditorWindow
 				tmp.y = yCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : 0;
 				tmp.z = zCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : 0;
 				
-				Undo.RegisterUndo(t, "Add noise to position");
+				Undo.RecordObject(t, "Add noise to position");
 				t.position += tmp;
 			}
 		}
@@ -389,7 +392,7 @@ public class TransformUtilitiesWindow : EditorWindow
 				tmp.y = yCheckbox ?  t.rotation.eulerAngles.y + Random.Range(randomRangeMin, randomRangeMax) : 0;
 				tmp.z = zCheckbox ?  t.rotation.eulerAngles.z + Random.Range(randomRangeMin, randomRangeMax) : 0;
 				
-				Undo.RegisterUndo(t, "Add noise to rotation");
+				Undo.RecordObject(t, "Add noise to rotation");
 				t.rotation = Quaternion.Euler(tmp);
 			}
 		}
@@ -404,7 +407,7 @@ public class TransformUtilitiesWindow : EditorWindow
 				tmp.y = yCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : 0;
 				tmp.z = zCheckbox ? Random.Range(randomRangeMin, randomRangeMax) : 0;
 				
-				Undo.RegisterUndo(t, "Add noise to local scale");
+				Undo.RecordObject(t, "Add noise to local scale");
 				t.localScale += tmp;
 			}
 		}

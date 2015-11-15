@@ -13,18 +13,18 @@ public abstract class MatchReaction {
 	protected bool _IsMatchRightDown = false;
 	protected bool _IsMatchLeftDown = false;
 
-	public List<Cell> _leftList  = new List<Cell>();
-	public List<Cell> _rightList = new List<Cell>();
-	public List<Cell> _upList    = new List<Cell>();
-	public List<Cell> _downList  = new List<Cell>();
+	public List<CellCtrl> _leftList  = new List<CellCtrl>();
+	public List<CellCtrl> _rightList = new List<CellCtrl>();
+	public List<CellCtrl> _upList    = new List<CellCtrl>();
+	public List<CellCtrl> _downList  = new List<CellCtrl>();
 
-	public List<Cell> _finalList = new List<Cell> ();
+	public List<CellCtrl> _finalList = new List<CellCtrl> ();
 
-	public Cell _curCell = null;
-	public Cell _leftUpCell = null;
-	public Cell _upRightCell = null;
-	public Cell _rightDownCell = null;
-	public Cell _downLeftCell = null;
+	public CellCtrl _curCell = null;
+	public CellCtrl _leftUpCell = null;
+	public CellCtrl _upRightCell = null;
+	public CellCtrl _rightDownCell = null;
+	public CellCtrl _downLeftCell = null;
 
 	public MatchReaction(MatchHandler curHandler)
 	{

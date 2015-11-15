@@ -1,18 +1,50 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class Cell :MonoBehaviour
+public class CellCtrl :MonoBehaviour
 {
 	public int Row { get; private set; }
 	public int Col { get; private set; }
 
-	public void SwapUnit(Cell curCell)
+	public int DirRow { get; set; }
+	public int DirCol { get; set; }
+
+	bool _isDroping = false;
+	public bool IsStable()
 	{
-		Unit temp = Unit;
+		if(_isDroping)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public bool isGenCell = false;
+
+	public CellCtrl PreCell = null;
+
+	public List<CellCtrl> AlternteCellList = new List<CellCtrl>();
+
+	public bool TryGetElment()
+	{
+		//
+		if(Unit != null)
+		{
+			return false;
+		}
+		return true;
+
+	}
+
+
+	public void SwapUnit(CellCtrl curCell)
+	{
+		UnitCtrl temp = Unit;
 		Unit = curCell.Unit;
 		curCell.Unit = temp;
 	}
-	public Unit Unit { get; set; }
+	public UnitCtrl Unit { get; set; }
 	
 	public bool IsEmpty { get { return Unit == null; } }
 
@@ -60,13 +92,13 @@ public class Cell :MonoBehaviour
 		Col = col;
 	}
 	
-	public void SetItem(Unit item)
+	public void SetItem(UnitCtrl item)
 	{
 		Unit = item;
 		Unit.Cell = this;
 	}
 	
-	public bool IsMatchColor(Cell oth)
+	public bool IsMatchColor(CellCtrl oth)
 	{
 		if (IsEmpty || oth.IsEmpty)
 			return false;

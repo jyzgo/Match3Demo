@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 
 public class HorizontalResult : BombResult {
 
-	public HorizontalResult(Cell curModel):base(curModel)
+	public HorizontalResult(CellCtrl curModel):base(curModel)
 	{}
 
 	protected override void CaulcElimList ()
@@ -21,7 +21,7 @@ public class HorizontalResult : BombResult {
 
 public class VerticalResult : BombResult {
 
-	public VerticalResult(Cell curModel):base(curModel)
+	public VerticalResult(CellCtrl curModel):base(curModel)
 	{}
 
 	protected override void CaulcElimList ()
@@ -35,7 +35,7 @@ public class VerticalResult : BombResult {
 
 public class CrossResult : BombResult {
 
-	public CrossResult(Cell curModel):base(curModel)
+	public CrossResult(CellCtrl curModel):base(curModel)
 	{}
 
 	protected override void CaulcElimList ()
@@ -51,7 +51,7 @@ public class CrossResult : BombResult {
 
 public class SquareResult : BombResult {
 
-	public SquareResult(Cell curModel):base(curModel)
+	public SquareResult(CellCtrl curModel):base(curModel)
 	{}
 
 	protected override void CaulcElimList ()
@@ -70,7 +70,7 @@ public class SquareResult : BombResult {
 
 public class FishOneResult:FishResult
 {
-	public FishOneResult(Cell curModel):base(curModel)
+	public FishOneResult(CellCtrl curModel):base(curModel)
 	{
 	}
 
@@ -90,7 +90,7 @@ public class FishOneResult:FishResult
 public class FishMutipleResult:FishResult
 {
 	int _fishNum = 0;
-	public FishMutipleResult(Cell curModel,int num):base(curModel)
+	public FishMutipleResult(CellCtrl curModel,int num):base(curModel)
 	{
 		_fishNum = num;
 	}
@@ -116,7 +116,7 @@ public class FishMutipleResult:FishResult
 public class ColorResult : BombResult {
 
 	UnitColor _elimColor;
-	public ColorResult(Cell curModel,UnitColor curColor):base(curModel)
+	public ColorResult(CellCtrl curModel,UnitColor curColor):base(curModel)
 	{
 		_elimColor = curColor;
 	}
@@ -124,11 +124,11 @@ public class ColorResult : BombResult {
 	protected override void CaulcElimList ()
 	{
 		float colorDelay = GameConfig.Instance.GetTime (TimeConf.colorDelay);
-		var curLvCtrl = LevelController.Current;
+		var curLvCtrl = LevelCtrl.Current;
 		for (int curRow = _minRow; curRow < _maxRow; curRow++) {
 			for(int curCol = _minCol; curCol < _maxCol ; curCol++)
 			{
-				Cell curCell = curLvCtrl[curRow,curCol];
+				CellCtrl curCell = curLvCtrl[curRow,curCol];
 				if(curCell!= null && curCell != _triggerModel && curCell.IsEliminateable && curCell.MatchEliminateColor(_elimColor))
 				{
 					var curInfo = new BombInfo(_triggerModel,colorDelay,curRow,curCol,BombCmd.Elim);
@@ -145,7 +145,7 @@ public class ColorResult : BombResult {
 public class DyeResult : BombResult {
 
 	UnitColor _dyeColor;
-	public DyeResult(Cell curModel,UnitColor curColor):base(curModel)
+	public DyeResult(CellCtrl curModel,UnitColor curColor):base(curModel)
 	{
 		_dyeColor = curColor;
 	}
@@ -154,11 +154,11 @@ public class DyeResult : BombResult {
 	{
 		float dyeDelay = GameConfig.Instance.GetTime (TimeConf.dyeDelay);
 		var dyeList = new List<BombInfo> ();
-		var curLvCtrl = LevelController.Current;
+		var curLvCtrl = LevelCtrl.Current;
 		for (int curRow = _minRow; curRow < _maxRow; curRow++) {
 			for(int curCol = _minCol; curCol < _maxCol ; curCol++)
 			{
-				Cell curCell = curLvCtrl[curRow,curCol];
+				CellCtrl curCell = curLvCtrl[curRow,curCol];
 				if(curCell!= null && curCell != _triggerModel && curCell.IsEliminateable && !curCell.MatchEliminateColor(_dyeColor))
 				{
 					var curInfo = new BombInfo(_triggerModel,dyeDelay,curRow,curCol,BombCmd.Dye);

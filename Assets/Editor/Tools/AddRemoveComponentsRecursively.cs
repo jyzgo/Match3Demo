@@ -59,22 +59,25 @@ public class AddRemoveComponentsRecursively : ScriptableWizard
 	/// </summary>
 	void OnWizardCreate()
 	{
-		int c = 0;
-		Transform[] ts = Selection.GetTransforms(SelectionMode.Deep);
-		foreach (Transform t in ts)
-		{
-			if (t.gameObject.GetComponent(componentType) == null)
-			{
-				if (UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(t.gameObject, "Assets/Editor/Tools/AddRemoveComponentsRecursively.cs (68,9)", componentType) == null)
-//				if(t.gameObject.AddComponent<typeof(componentType)>())
-				{
-					Debug.LogWarning("Component of type " + componentType + " does not exist");
-					return;
-				}
-				c++;
-			}
-		}
-		Debug.Log("Added " + c + " components of type " + componentType);
+		Debug.LogWarning ("Not implenment");
+//		int c = 0;
+//		Transform[] ts = Selection.GetTransforms(SelectionMode.Deep);
+//		foreach (Transform t in ts)
+//		{
+//			if (t.gameObject.GetComponent(componentType) == null)
+//			{
+//				if (UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(t.gameObject, "Assets/Editor/Tools/AddRemoveComponentsRecursively.cs (68,9)", componentType) == null)
+////				if((t.gameObject.AddComponent<Types.GetType(componentType)>()) == null)
+//				if((t.gameObject.AddComponent(Types.GetType(componentType))== null)
+////					if(GameObject::AddComponent()
+//				{
+//					Debug.LogWarning("Component of type " + componentType + " does not exist");
+//					return;
+//				}
+//				c++;
+//			}
+//		}
+//		Debug.Log("Added " + c + " components of type " + componentType);
 	}
 	
 	/// <summary>

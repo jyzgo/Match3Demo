@@ -27,25 +27,25 @@ public enum ReactionType
 
 public class MatchHandler :Singleton<MatchHandler>   {
 
-	public Cell _curCell = null;
+	public CellCtrl _curCell = null;
 	
 		 
-	public List<Cell> _leftList  = new List<Cell>();
-	public List<Cell> _rightList = new List<Cell>();
-	public List<Cell> _upList    = new List<Cell>();
-	public List<Cell> _downList  = new List<Cell>();
+	public List<CellCtrl> _leftList  = new List<CellCtrl>();
+	public List<CellCtrl> _rightList = new List<CellCtrl>();
+	public List<CellCtrl> _upList    = new List<CellCtrl>();
+	public List<CellCtrl> _downList  = new List<CellCtrl>();
 
 	public bool _IsMatchLeftUp = false;
 	public bool _IsMatchUpRight = false;
 	public bool _IsMatchRightDown = false;
 	public bool _IsMatchDownLeft = false;
 
-	public Cell _leftUpCell = null;
-	public Cell _upRightCell = null;
-	public Cell _rightDownCell = null;
-	public Cell _downLeftCell = null;
+	public CellCtrl _leftUpCell = null;
+	public CellCtrl _upRightCell = null;
+	public CellCtrl _rightDownCell = null;
+	public CellCtrl _downLeftCell = null;
 
-	public MatchReaction GetMatchReaction(Cell curCell)
+	public MatchReaction GetMatchReaction(CellCtrl curCell)
 	{
 		Reset();
 		_curCell = curCell;
@@ -76,7 +76,7 @@ public class MatchHandler :Singleton<MatchHandler>   {
 
 	void CalculateMatch()
 	{
-		var curLv = LevelController.Current;
+		var curLv = LevelCtrl.Current;
 	
 		curLv.CheckSameColorAndAdd(_curCell,0,-1,_leftList);
 		curLv.CheckSameColorAndAdd(_curCell,0,1,_rightList);
@@ -147,7 +147,7 @@ public class MatchHandler :Singleton<MatchHandler>   {
 
 
 
-	public Cell CurCell {
+	public CellCtrl CurCell {
 		get { 
 			return _curCell;
 		}
