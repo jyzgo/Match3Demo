@@ -227,8 +227,13 @@ public class LevelCtrl : MonoBehaviour {
 				var curCellSc = cell.gameObject.GetComponent<CellCtrl>();
 				curCellSc.Init(row,col);
 				colList.Add(curCellSc);
-				curCellSc.DirRow = 0 ;
-				curCellSc.DirCol = -1;
+				curCellSc.SetDir(0,1); 
+
+
+				if(row == MaxRow - 1)
+				{
+					curCellSc.isGenCell = true;
+				}
 
 				cell.transform.SetParent(_cellHolder.transform);
 				if((row + col +1) % 2 == 0){

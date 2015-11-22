@@ -2,41 +2,89 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
+
 public class CellCtrl :MonoBehaviour
 {
+
 	public int Row { get; private set; }
 	public int Col { get; private set; }
 
-	public int DirRow { get; set; }
-	public int DirCol { get; set; }
 
-	bool _isDroping = false;
-	public bool IsStable()
+	public int DirRow { get; private set;}
+	public int DirCol { get; private set;}
+
+	public int SideDirRow { get; private set;}
+	public int SideDirCol { get; private set;}
+
+	public void SetDir(int row,int col)
 	{
-		if(_isDroping)
-		{
-			return false;
-		}
-		return true;
+		Debug.Assert(row * col != 0,"Shouldn't all be zero");
+		DirRow = row;
+		DirCol = col;
+
 	}
 
 	public bool isGenCell = false;
 
-	public CellCtrl PreCell = null;
-
-	public List<CellCtrl> AlternteCellList = new List<CellCtrl>();
-
-	public bool TryGetElment()
+	public bool IsDropHere()
 	{
-		//
-		if(Unit != null)
+				
+		if(isGenCell)
 		{
-			return false;
+			return true;
 		}
-		return true;
+		//get up steam cell, check if them stable
 
+		var preCellRow = Row + DirRow;
+		var preCellCol = Col + DirCol;
+		var mainDrop = IsCellDropable (preCellRow, preCellCol);
+
+		if (mainDrop == true) {
+			return true;
+		}
+
+		int sideRow1 = Row;
+		int sideCol1 = Col;
+
+		int sideRow2 = Row;
+		int sideCol2 = Col;
+		if (DirRow == 0) {
+			sideRow1 += 1;
+			sideRow2 += -1;
+		} else if (DirCol == 0) {
+			sideCol1 += 1;
+			sideCol2 += -1;
+		}else
+		{
+			Debug.Assert(true,"Shouldn't happened");
+		}
+
+		bool isSideStable = true;
+		if (IsCellDropable (sideRow1, sideCol1)) {
+			SideDirRow = sideRow1;
+			SideDirCol = sideCol1;
+		} else if (IsCellDropable (sideRow2, sideCol2)) 
+		{
+			SideDirRow = sideRow2;
+			SideDirCol = sideCol2;
+		} else {
+			isSideStable = false;
+		}
+
+		return isSideStable;
 	}
 
+	bool IsCellDropable(int row,int col)
+	{
+		bool curCellExist = LevelCtrl.Current.IsInBorder (row, col);
+		bool isDropAble = false;
+		if (curCellExist) {
+			isDropAble = LevelCtrl.Current[row,col].IsDropHere();
+		}
+		return isDropAble;
+	}
+	
 
 	public void SwapUnit(CellCtrl curCell)
 	{
