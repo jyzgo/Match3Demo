@@ -19,7 +19,7 @@ public class CellCtrl :MonoBehaviour
 
 	public void SetDir(int row,int col)
 	{
-		Debug.Assert(row * col != 0,"Shouldn't all be zero");
+		Debug.Assert((Mathf.Abs (row) + Mathf.Abs(col)) != 0,"Shouldn't all be zero");
 		DirRow = row;
 		DirCol = col;
 
@@ -115,6 +115,7 @@ public class CellCtrl :MonoBehaviour
 	public void ElimDone ()
 	{
 		Debug.Log("Elim done");
+		LevelCtrl.Current.CheckDrop ();
 	}
 
 	public bool MatchEliminateColor (UnitColor _elimColor)

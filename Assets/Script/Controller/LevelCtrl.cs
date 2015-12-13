@@ -96,11 +96,27 @@ public class LevelCtrl : MonoBehaviour {
 		}
 	}
 
+	bool needDrop = false;
+	public void CheckDrop()
+	{
+		needDrop = true;
+	}
+
+	void Droping()
+	{
+
+	}
+
+
 	SwapState _state = SwapState.Default;
 	CellCtrl _activeCell  = null;
 	CellCtrl _passiveCell = null;
 	void Update()
 	{
+		if (needDrop == true) {
+			Droping();
+		}
+
 		switch (_state) {
 		case (SwapState.Default):
 		{
