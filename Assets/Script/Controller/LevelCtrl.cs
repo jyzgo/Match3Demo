@@ -97,10 +97,10 @@ public class LevelCtrl : MonoBehaviour {
 	}
 
 	bool needDrop = false;
-	public void CheckDrop()
-	{
-		needDrop = true;
-	}
+	//public void CheckDrop()
+	//{
+	//	needDrop = true;
+	//}
 
 	void Droping()
 	{
