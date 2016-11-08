@@ -122,7 +122,7 @@ public class CellCtrl :MonoBehaviour
 	{
 		if (!IsBombable)
 			return false;
-		if (Unit.unitColor == _elimColor)
+		if (Unit.unitNum == _elimColor)
 			return true;
 		return false;
 	}
@@ -152,11 +152,11 @@ public class CellCtrl :MonoBehaviour
 		Unit.Cell = this;
 	}
 	
-	public bool IsMatchColor(CellCtrl oth)
+	public bool IsSameNum(CellCtrl oth)
 	{
 		if (IsEmpty || oth.IsEmpty)
 			return false;
-		if (Unit.unitColor == oth.Unit.unitColor)
+		if (Unit.unitNum == oth.Unit.unitNum)
 			return true;
 		return false;
 	}

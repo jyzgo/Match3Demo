@@ -46,7 +46,7 @@ public class UnitCtrl : MonoBehaviour
 	}
 
 	UnitColor _unitColor;
-	public UnitColor unitColor
+	public UnitColor unitNum
 	{
 		get{return _unitColor;}
 	}

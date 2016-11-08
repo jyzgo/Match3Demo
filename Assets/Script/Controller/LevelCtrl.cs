@@ -62,7 +62,7 @@ public class LevelCtrl : MonoBehaviour {
 	{
 		if (lCell == null || rCell == null)
 			return false;
-		return lCell.IsMatchColor (rCell);
+		return lCell.IsSameNum (rCell);
 	}
 
 	int LevelState {
@@ -88,7 +88,7 @@ public class LevelCtrl : MonoBehaviour {
 			var nextCell = this[nextRow,nextCol];
 			curRow = nextRow;
 			curCol = nextCol;
-			if(g.IsMatchColor(nextCell) && nextCell.Unit.bombType != BombType.Coloring)
+			if(g.IsSameNum(nextCell) && nextCell.Unit.bombType != BombType.Coloring)
 			{
 				curList.Add(nextCell);
 				
@@ -129,13 +129,16 @@ public class LevelCtrl : MonoBehaviour {
 
 	SwapState _state = SwapState.Default;
 	CellCtrl _activeCell  = null;
-	CellCtrl _passiveCell = null;
+    float _lastPressTime = 0f;
+    const float PRESS_INTERVAL = 0.2f;
 	void Update()
 	{
         if(Droping())
         {
             return;
         }
+
+
 
 		switch (_state) {
 		case (SwapState.Default):
@@ -145,27 +148,22 @@ public class LevelCtrl : MonoBehaviour {
 				if (hit.collider != null) {
 					_activeCell = hit.collider.GetComponent<CellCtrl> ();
 					_state = SwapState.Swiping;
+                    _lastPressTime = Time.time;
 				}
 			}
 			break;
 		}
 		case(SwapState.Swiping):
 		{
-			if (Input.GetMouseButton (0)) {
+              if (_lastPressTime + PRESS_INTERVAL > Time.time)
+              {
+                        _state = SwapState.Default;
+                        _activeCell = null;
+               }
+               if (Input.GetMouseButton (0))
+                    {
 				var hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
-				if (hit.collider != null && _activeCell.gameObject != hit.collider.gameObject) {
-					_passiveCell = hit.collider.GetComponent<CellCtrl> ();
-					if (!_activeCell.AreVerticalOrHorizontalNeighbors(_passiveCell))
-					{
-						_state = SwapState.Default;
-						Restore();
-					}
-					else
-					{
-						_state = SwapState.Updating;
-
-						StartCoroutine(Swaping());
-					}
+				if (hit.collider != null && _activeCell.gameObject == hit.collider.gameObject) {
 				}
 			}
 			break;
@@ -177,37 +175,6 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 
-	IEnumerator Swaping()
-	{
-		var activePosition = new Vector3 (_activeCell.transform.position.x, _activeCell.transform.position.y, _activeCell.Unit.transform.position.z);
-		var passivePostion = new Vector3 (_passiveCell.transform.position.x, _passiveCell.transform.position.y, _passiveCell.Unit.transform.position.z);
-
-		// swap model and play action
-		_activeCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,passivePostion));
-		_passiveCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,activePosition));
-		_activeCell.SwapUnit (_passiveCell);
-
-		yield return new WaitForSeconds (Constants.SWAP_TIME);
-
-		//check is match or not
-		var actReact = MatchHandler.Instance.GetMatchReaction (_activeCell);
-		var pasReact = MatchHandler.Instance.GetMatchReaction (_passiveCell);
-
-		if (actReact != null || pasReact != null) {
-			//yes, is able to swap
-			TryElim(actReact);
-			TryElim(pasReact);
-
-		} else {
-			//no, unable to swap,swap back them
-			_activeCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,passivePostion));
-			_passiveCell.Unit.RunActions (new MTMoveTo(Constants.SWAP_TIME,activePosition));
-			_activeCell.SwapUnit (_passiveCell);
-			yield return new WaitForSeconds(Constants.SWAP_TIME);
-		}
-		Restore ();
-
-	}
 
 	void TryElim(MatchReaction curReact)
 	{
@@ -227,7 +194,6 @@ public class LevelCtrl : MonoBehaviour {
 	{
 		_state = SwapState.Default;
 		_activeCell = null;
-		_passiveCell = null;
 	}
 
 	void UpdateActiveArea ()
