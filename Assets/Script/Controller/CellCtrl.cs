@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
-
+using System;
 
 public class CellCtrl :MonoBehaviour
 {
@@ -86,6 +85,7 @@ public class CellCtrl :MonoBehaviour
 	}
 	
 
+
 	public void SwapUnit(CellCtrl curCell)
 	{
 		UnitCtrl temp = Unit;
@@ -127,7 +127,12 @@ public class CellCtrl :MonoBehaviour
 		return false;
 	}
 
-	public bool IsEliminateable {
+    internal bool Droping()
+    {
+        return false;
+    }
+
+    public bool IsEliminateable {
 		get
 		{
 			return IsBombable;

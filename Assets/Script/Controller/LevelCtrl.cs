@@ -21,6 +21,8 @@ public class LevelCtrl : MonoBehaviour {
 		_cellT = (GameObject)Resources.Load("Prefabs/Cell", typeof(GameObject));
 		_unitT = (GameObject)Resources.Load ("Prefabs/Unit", typeof(GameObject));
 		_cellHolder = new GameObject("CellHolder");
+        var mat = MatchHandler.Instance;
+        var conf = GameConfig.Instance;
 	}
 	// Use this for initialization
 	void Start () {
@@ -54,8 +56,9 @@ public class LevelCtrl : MonoBehaviour {
 		return false;
 	}
 	GameObject _cellHolder;
+    
 
-	public bool IsSameColor (CellCtrl lCell, CellCtrl rCell)
+	public bool IsSameNum (CellCtrl lCell, CellCtrl rCell)
 	{
 		if (lCell == null || rCell == null)
 			return false;
@@ -102,8 +105,24 @@ public class LevelCtrl : MonoBehaviour {
 	//	needDrop = true;
 	//}
 
-	void Droping()
+    bool Droping()
 	{
+        bool isAnyCellDroping = false;
+        for(int row = 0; row < _rowList.Count; row++)
+        {
+            var colList = _rowList[row];
+            for(int col  = 0; col <colList.Count; col++)
+            {
+                var curCell = colList[col];
+               if(curCell.Droping())
+                {
+                    isAnyCellDroping = true;
+                }
+            }
+
+        }
+
+        return isAnyCellDroping;
 
 	}
 
@@ -113,9 +132,10 @@ public class LevelCtrl : MonoBehaviour {
 	CellCtrl _passiveCell = null;
 	void Update()
 	{
-		if (needDrop == true) {
-			Droping();
-		}
+        if(Droping())
+        {
+            return;
+        }
 
 		switch (_state) {
 		case (SwapState.Default):

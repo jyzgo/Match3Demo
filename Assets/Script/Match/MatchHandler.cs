@@ -91,10 +91,10 @@ public class MatchHandler :Singleton<MatchHandler>   {
 		_rightDownCell = curLv[curRow -1,curCol + 1];
 		_downLeftCell = curLv[curRow -1,curCol - 1];
 
-		_IsMatchLeftUp    = curLv.IsSameColor(_curCell,_leftUpCell);
-		_IsMatchUpRight   = curLv.IsSameColor(_curCell,_upRightCell);
-		_IsMatchRightDown = curLv.IsSameColor(_curCell,_rightDownCell);
-		_IsMatchDownLeft  = curLv.IsSameColor(_curCell,_downLeftCell);
+		_IsMatchLeftUp    = curLv.IsSameNum(_curCell,_leftUpCell);
+		_IsMatchUpRight   = curLv.IsSameNum(_curCell,_upRightCell);
+		_IsMatchRightDown = curLv.IsSameNum(_curCell,_rightDownCell);
+		_IsMatchDownLeft  = curLv.IsSameNum(_curCell,_downLeftCell);
 
 	}
 
