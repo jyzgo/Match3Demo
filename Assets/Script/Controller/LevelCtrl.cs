@@ -99,11 +99,6 @@ public class LevelCtrl : MonoBehaviour {
 		}
 	}
 
-	bool needDrop = false;
-	//public void CheckDrop()
-	//{
-	//	needDrop = true;
-	//}
 
     bool Droping()
 	{
@@ -130,7 +125,7 @@ public class LevelCtrl : MonoBehaviour {
 	SwapState _state = SwapState.Default;
 	CellCtrl _activeCell  = null;
     float _lastPressTime = 0f;
-    const float PRESS_INTERVAL = 0.2f;
+    const float PRESS_INTERVAL = 0.3f;
 	void Update()
 	{
         if(Droping())
@@ -138,39 +133,49 @@ public class LevelCtrl : MonoBehaviour {
             return;
         }
 
-
-
-		switch (_state) {
-		case (SwapState.Default):
-		{
-			if (Input.GetMouseButton (0)) {
-				var hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
-				if (hit.collider != null) {
-					_activeCell = hit.collider.GetComponent<CellCtrl> ();
-					_state = SwapState.Swiping;
-                    _lastPressTime = Time.time;
-				}
-			}
-			break;
-		}
-		case(SwapState.Swiping):
-		{
-              if (_lastPressTime + PRESS_INTERVAL > Time.time)
-              {
+		switch (_state)
+        {
+            case (SwapState.Default):
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                        if (hit.collider != null)
+                        {
+                            _activeCell = hit.collider.GetComponent<CellCtrl>();
+                            _state = SwapState.Swiping;
+                            _lastPressTime = Time.time;
+                        }
+                    }
+                    break;
+                }
+            case (SwapState.Swiping):
+                {
+                    if (_lastPressTime + PRESS_INTERVAL < Time.time)
+                    {
                         _state = SwapState.Default;
                         _activeCell = null;
-               }
-               if (Input.GetMouseButton (0))
+                    }
+
+                    if (Input.GetMouseButtonDown(0))
                     {
-				var hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
-				if (hit.collider != null && _activeCell.gameObject == hit.collider.gameObject) {
-				}
-			}
-			break;
+                        var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                        if (hit.collider != null && _activeCell!=null && _activeCell.gameObject == hit.collider.gameObject)
+                        {
+                            Debug.Log("double click");
+                            _activeCell.Elim();
+                        }
+                    }
+                    break;
 
 
-		}
-		}
+                }
+            case (SwapState.Updating):
+                {
+                    Droping();
+                    break;
+                }
+        }
 
 	}
 	
@@ -253,6 +258,7 @@ public class LevelCtrl : MonoBehaviour {
 
 	public bool CheckDrop()
 	{
+       // _state = SwapState.Updating;
 		bool isDrop = false;
 		for (int row = 0; row <_rowList.Count; row ++) 
 		{
